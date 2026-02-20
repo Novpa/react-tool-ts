@@ -1,6 +1,6 @@
 import bullet from "../assets/list/list.png";
 import type { initialStateType } from "./Box";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 type ListProps = {
   id: string;
