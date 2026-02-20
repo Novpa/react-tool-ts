@@ -2,17 +2,26 @@ import { useState } from "react";
 import List from "./List";
 
 export type initialStateType = {
+  id: string;
   task: string;
   completed: boolean;
 };
 
+const generateRandomId = (): string => {
+  return `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+};
+
 function Box() {
   const initialState: initialStateType[] = [
-    { task: "go to the gym", completed: true },
+    {
+      id: generateRandomId(),
+      task: "go to the gym",
+      completed: false,
+    },
   ];
 
   const [inputTask, setInputTask] = useState("");
-  const [allTasks, setAllTask] = useState(initialState);
+  const [allTasks, setAllTask] = useState<initialStateType[]>(initialState);
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,6 +29,7 @@ function Box() {
     if (inputTask.trim() === "") return;
 
     const newItem: initialStateType = {
+      id: generateRandomId(),
       task: inputTask,
       completed: false,
     };
@@ -50,8 +60,16 @@ function Box() {
         </form>
 
         <div className="font-josefin rounded-md border border-stone-200 bg-white py-2 text-stone-600 shadow-xl">
-          {allTasks.map((taskData: initialStateType) => {
-            return <List task={taskData.task} completed={taskData.completed} />;
+          {allTasks?.map((taskData: initialStateType) => {
+            return (
+              <List
+                key={taskData.id}
+                task={taskData.task}
+                id={taskData.id}
+                setAllTask={setAllTask}
+                completed={taskData.completed}
+              />
+            );
           })}
 
           {/* summary */}
