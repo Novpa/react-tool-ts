@@ -6,6 +6,7 @@ export type initialStateType = {
   id: string;
   task: string;
   completed: boolean;
+  createdOn: Date;
 };
 
 const generateRandomId = (): string => {
@@ -18,6 +19,7 @@ function Box() {
       id: generateRandomId(),
       task: "go to the gym",
       completed: false,
+      createdOn: new Date(),
     },
   ];
 
@@ -36,14 +38,6 @@ function Box() {
       .includes(searchTask.split(" ").join("").toLowerCase()),
   );
 
-  // console.log(
-  //   "sorted",
-  //   allTasks.sort(
-  //     (firstTask, secondTask) =>
-  //       Number(secondTask.completed) - Number(firstTask.completed),
-  //   ),
-  // );
-
   let derivedTasksData = searchTask.trim() === "" ? allTasks : searchedTask;
 
   if (isSortedBy === "completed") {
@@ -51,8 +45,11 @@ function Box() {
       (firstTask, secondTask) =>
         Number(secondTask.completed) - Number(firstTask.completed),
     );
-  } else {
-    derivedTasksData = allTasks;
+  } else if (isSortedBy === "dateCreated") {
+    derivedTasksData = derivedTasksData.sort(
+      (firstTask, secondTask) =>
+        secondTask.createdOn.getTime() - firstTask.createdOn.getTime(),
+    );
   }
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,6 +61,7 @@ function Box() {
       id: generateRandomId(),
       task: inputTask,
       completed: false,
+      createdOn: new Date(),
     };
 
     setAllTask((tasks) => [...tasks, newItem]);
