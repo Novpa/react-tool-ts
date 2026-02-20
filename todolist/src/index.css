@@ -4,3 +4,12 @@
 @theme {
   --font-josefin: "Josefin Sans", sans-serif;
 }
+
+.main-bg {
+  background: #ffff;
+}
+
+.fake-dark-mode {
+  filter: invert(100%);
+  transition: all 0.5s;
+}

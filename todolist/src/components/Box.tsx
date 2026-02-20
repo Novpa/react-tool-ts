@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import List from "./List";
 import SearchTask from "./SearchTask";
+import sabit from "../assets/sabit.svg";
+import bintang from "../assets/bintang.svg";
 
 export type initialStateType = {
   id: string;
@@ -9,11 +11,16 @@ export type initialStateType = {
   createdOn: Date;
 };
 
+type BoxProps = {
+  isDarkTheme: boolean;
+  setIsDarkTheme: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const generateRandomId = (): string => {
   return `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 };
 
-function Box() {
+function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
   const initialState: initialStateType[] = [
     {
       id: generateRandomId(),
@@ -25,10 +32,14 @@ function Box() {
 
   const [inputTask, setInputTask] = useState("");
   const [allTasks, setAllTask] = useState<initialStateType[]>(initialState);
-  const [searchTask, setSearchTask] = useState("");
+  const [searchTask, setSearchTask] = useState<string>("");
   const [isSortedBy, setIsSortedBy] = useState<string>("");
 
   console.log(isSortedBy);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("fake-dark-mode");
+  }, [isDarkTheme]);
 
   const searchedTask = allTasks.filter((taskItem) =>
     taskItem.task
@@ -127,12 +138,18 @@ function Box() {
           <SearchTask setSearchTask={setSearchTask} />
           <select
             onChange={(e) => setIsSortedBy(e.target.value)}
-            className="text-md font-josefin h-15 w-30 rounded-md border border-stone-300 px-2 py-2 text-stone-400"
+            className="text-md font-josefin h-15 w-30 rounded-md border border-stone-300 px-2 py-2 text-stone-300 shadow-xl backdrop-blur-md"
           >
-            <option value="">Select sorted</option>
+            <option value="">Sort by</option>
             <option value="completed">Sorted by completed</option>
             <option value="dateCreated">Sorted by created date</option>
           </select>
+          <div
+            className="flex cursor-pointer items-center justify-center rounded-full bg-indigo-900 px-2 py-2"
+            onClick={() => setIsDarkTheme((theme) => !theme)}
+          >
+            <img src={isDarkTheme ? bintang : sabit} />
+          </div>
         </div>
       </div>
     </>
