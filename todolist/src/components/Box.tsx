@@ -1,33 +1,58 @@
+import { useState } from "react";
+import List from "./List";
+
+export type initialStateType = {
+  task: string;
+  completed: boolean;
+};
+
 function Box() {
+  const initialState: initialStateType[] = [
+    { task: "go to the gym", completed: true },
+  ];
+
+  const [inputTask, setInputTask] = useState("");
+  const [allTasks, setAllTask] = useState(initialState);
+
+  const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (inputTask.trim() === "") return;
+
+    const newItem: initialStateType = {
+      task: inputTask,
+      completed: false,
+    };
+
+    setAllTask((tasks) => [...tasks, newItem]);
+    setInputTask("");
+  };
+
   return (
     <div className="absolute top-5 flex w-full justify-center md:top-1 lg:top-25">
       <div className="w-[80%] md:w-[40%]">
         <div>
-          <h1 className="font-josefin text-4xl font-semibold tracking-widest text-stone-700">
+          <h1 className="font-josefin text-4xl font-semibold tracking-widest text-stone-100">
             TODO
           </h1>
         </div>
-        <div className="relative mt-2 mb-3 rounded-md bg-white md:mt-10">
+        <form
+          onSubmit={handleAddTask}
+          className="relative mt-2 mb-3 rounded-md bg-white md:mt-10"
+        >
           <input
-            className="font-josefin h-15 w-full rounded-md border border-stone-200 px-5 text-2xl text-stone-600"
+            value={inputTask}
+            className="font-josefin h-15 w-full rounded-md border border-stone-200 px-5 pl-15 text-2xl text-stone-600"
             type="text"
+            onChange={(e) => setInputTask(e.target.value)}
           />
-          <div className="absolute top-[40%] left-5 h-3.5 w-3.5 rounded-sm border border-stone-400"></div>
-        </div>
+          <div className="absolute top-[30%] left-5 h-6 w-6 rounded-full border border-stone-400"></div>
+        </form>
 
         <div className="font-josefin rounded-md border border-stone-200 bg-white py-2 text-stone-600 shadow-xl">
-          <div className="flex h-15 items-center gap-5 border-b border-stone-300 bg-white px-5 text-lg">
-            <input className="rounded-full" type="checkbox" />
-            <p>Content</p>
-          </div>
-          <div className="flex h-15 items-center gap-5 border-b border-stone-300 bg-white px-5 text-lg">
-            <input type="checkbox" />
-            <p>Content</p>
-          </div>
-          <div className="flex h-15 items-center gap-5 border-b border-stone-300 bg-white px-5 text-lg">
-            <input type="checkbox" />
-            <p>Content</p>
-          </div>
+          {allTasks.map((taskData: initialStateType) => {
+            return <List task={taskData.task} completed={taskData.completed} />;
+          })}
 
           {/* summary */}
           <div className="font-josefin flex h-10 items-center justify-between px-5 text-sm font-light">
