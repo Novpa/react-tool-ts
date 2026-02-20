@@ -8,7 +8,7 @@ function SearchTask({ setSearchTask }: SearchTaskProps) {
       <input
         placeholder="Search task..."
         onChange={(e) => setSearchTask(e.target.value)}
-        className="font-josefin fixed bottom-10 z-10 h-15 w-[40%] rounded-md border border-stone-200 px-5 pl-15 text-xl text-stone-600 shadow-xl"
+        className="font-josefin w-20rounded-md text-md fixed top-3 right-3 z-10 h-10 border border-stone-200 px-5 pl-15 text-stone-200 shadow-xl backdrop-blur-md"
       />
     </div>
   );

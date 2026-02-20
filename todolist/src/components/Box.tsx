@@ -26,7 +26,11 @@ function Box() {
   const [searchTask, setSearchTask] = useState("");
 
   const searchedTask = allTasks.filter((taskItem) =>
-    taskItem.task.toLowerCase().includes(searchTask),
+    taskItem.task
+      .split(" ")
+      .join("")
+      .toLowerCase()
+      .includes(searchTask.split(" ").join("").toLowerCase()),
   );
 
   const derivedTasksData = searchTask.trim() === "" ? allTasks : searchedTask;
