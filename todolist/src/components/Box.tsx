@@ -37,9 +37,9 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
 
   console.log(isSortedBy);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("fake-dark-mode");
-  }, [isDarkTheme]);
+  // useEffect(() => {
+  //   document.documentElement.classList.toggle("fake-dark-mode");
+  // }, [isDarkTheme]);
 
   const searchedTask = allTasks.filter((taskItem) =>
     taskItem.task
@@ -81,7 +81,9 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
 
   return (
     <>
-      <div className="absolute top-5 flex w-full justify-center md:top-5 lg:top-10">
+      <div
+        className={`${isDarkTheme ? "fake-dark-mode" : ""} absolute top-5 flex w-full justify-center md:top-5 lg:top-10`}
+      >
         <div className="w-[90%] md:w-[60%] lg:w-[40%]">
           <div>
             <h1 className="font-josefin text-4xl font-semibold tracking-widest text-stone-100">
