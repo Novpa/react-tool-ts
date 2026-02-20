@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import List from "./List";
 import SearchTask from "./SearchTask";
 
@@ -24,6 +24,9 @@ function Box() {
   const [inputTask, setInputTask] = useState("");
   const [allTasks, setAllTask] = useState<initialStateType[]>(initialState);
   const [searchTask, setSearchTask] = useState("");
+  const [isSortedBy, setIsSortedBy] = useState<string>("");
+
+  console.log(isSortedBy);
 
   const searchedTask = allTasks.filter((taskItem) =>
     taskItem.task
@@ -33,9 +36,24 @@ function Box() {
       .includes(searchTask.split(" ").join("").toLowerCase()),
   );
 
-  const derivedTasksData = searchTask.trim() === "" ? allTasks : searchedTask;
+  // console.log(
+  //   "sorted",
+  //   allTasks.sort(
+  //     (firstTask, secondTask) =>
+  //       Number(secondTask.completed) - Number(firstTask.completed),
+  //   ),
+  // );
 
-  console.log(searchedTask);
+  let derivedTasksData = searchTask.trim() === "" ? allTasks : searchedTask;
+
+  if (isSortedBy === "completed") {
+    derivedTasksData = derivedTasksData.sort(
+      (firstTask, secondTask) =>
+        Number(secondTask.completed) - Number(firstTask.completed),
+    );
+  } else {
+    derivedTasksData = allTasks;
+  }
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +73,7 @@ function Box() {
   return (
     <>
       <div className="absolute top-5 flex w-full justify-center md:top-5 lg:top-10">
-        <div className="w-[80%] md:w-[40%]">
+        <div className="w-[90%] md:w-[60%] lg:w-[40%]">
           <div>
             <h1 className="font-josefin text-4xl font-semibold tracking-widest text-stone-100">
               TODO
@@ -76,20 +94,22 @@ function Box() {
           </form>
 
           <div className="font-josefin rounded-md border border-stone-200 bg-white py-2 text-stone-600 shadow-xl">
-            {derivedTasksData?.map((taskData: initialStateType) => {
-              return (
-                <List
-                  key={taskData.id}
-                  task={taskData.task}
-                  id={taskData.id}
-                  setAllTask={setAllTask}
-                  completed={taskData.completed}
-                />
-              );
-            })}
+            <div className="h-70 overflow-y-auto">
+              {derivedTasksData?.map((taskData: initialStateType) => {
+                return (
+                  <List
+                    key={taskData.id}
+                    task={taskData.task}
+                    id={taskData.id}
+                    setAllTask={setAllTask}
+                    completed={taskData.completed}
+                  />
+                );
+              })}
+            </div>
 
             {/* summary */}
-            <div className="font-josefin flex h-10 items-center justify-between px-5 text-sm font-light">
+            <div className="font-josefin flex h-10 items-center justify-between border-t border-stone-200 px-5 text-sm font-light">
               <p>5 items left</p>
 
               <div className="flex gap-2 md:gap-4">
@@ -104,7 +124,19 @@ function Box() {
         </div>
       </div>
       {/* Search bar */}
-      <SearchTask setSearchTask={setSearchTask} />
+      <div className="flex justify-center">
+        <div className="fixed bottom-10 z-10 flex gap-4 md:top-3 md:right-3 md:h-10">
+          <SearchTask setSearchTask={setSearchTask} />
+          <select
+            onChange={(e) => setIsSortedBy(e.target.value)}
+            className="text-md font-josefin h-15 w-30 rounded-md border border-stone-300 px-2 py-2 text-stone-400"
+          >
+            <option value="">Select sorted</option>
+            <option value="completed">Sorted by completed</option>
+            <option value="dateCreated">Sorted by created date</option>
+          </select>
+        </div>
+      </div>
     </>
   );
 }
