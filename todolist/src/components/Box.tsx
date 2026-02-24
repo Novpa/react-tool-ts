@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import List from "./List";
 import SearchTask from "./SearchTask";
 import sabit from "../assets/sabit.svg";
 import bintang from "../assets/bintang.svg";
+import Summary from "./Summary";
 
 export type initialStateType = {
   id: string;
@@ -37,10 +38,6 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
 
   console.log(isSortedBy);
 
-  // useEffect(() => {
-  //   document.documentElement.classList.toggle("fake-dark-mode");
-  // }, [isDarkTheme]);
-
   const searchedTask = allTasks.filter((taskItem) =>
     taskItem.task
       .split(" ")
@@ -49,7 +46,8 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
       .includes(searchTask.split(" ").join("").toLowerCase()),
   );
 
-  let derivedTasksData = searchTask.trim() === "" ? allTasks : searchedTask;
+  let derivedTasksData =
+    searchTask.trim() === "" ? [...allTasks] : searchedTask; // akan digunakan di sort, jadi pake spread agar tidak mengubah array lama
 
   if (isSortedBy === "completed") {
     derivedTasksData = derivedTasksData.sort(
@@ -61,7 +59,19 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
       (firstTask, secondTask) =>
         secondTask.createdOn.getTime() - firstTask.createdOn.getTime(),
     );
+  } else if (isSortedBy === "active") {
+    derivedTasksData = derivedTasksData.filter(
+      (task) => task.completed === false,
+    );
+  } else if (isSortedBy === "done") {
+    derivedTasksData = derivedTasksData.filter(
+      (task) => task.completed === true,
+    );
   }
+
+  const handleCompletedTask = (): void => {
+    setAllTask((tasks) => tasks.filter((task) => task.completed === false));
+  };
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -120,17 +130,11 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
             </div>
 
             {/* summary */}
-            <div className="font-josefin flex h-10 items-center justify-between border-t border-stone-200 px-5 text-sm font-light">
-              <p>5 items left</p>
-
-              <div className="flex gap-2 md:gap-4">
-                <p>All</p>
-                <p>Active</p>
-                <p>Completed</p>
-              </div>
-
-              <p>Clear completed</p>
-            </div>
+            <Summary
+              allTask={derivedTasksData}
+              setIsSortedBy={setIsSortedBy}
+              handleCompletedTask={handleCompletedTask}
+            />
           </div>
         </div>
       </div>

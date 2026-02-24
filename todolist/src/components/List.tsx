@@ -17,7 +17,7 @@ function List({ id, task, completed, setAllTask }: ListProps) {
     setIsEditing((editing) => !editing);
   };
 
-  const safeEditing = (e: React.FormEvent<HTMLFormElement>, taksId: string) => {
+  const saveEditing = (e: React.FormEvent<HTMLFormElement>, taksId: string) => {
     e.preventDefault();
     console.log(taksId, id);
     setAllTask((allTask) =>
@@ -37,7 +37,7 @@ function List({ id, task, completed, setAllTask }: ListProps) {
   };
 
   const editInput = (
-    <form onSubmit={(e) => safeEditing(e, id)} className="flex gap-4 pl-5">
+    <form onSubmit={(e) => saveEditing(e, id)} className="flex gap-4 pl-5">
       <input
         className="font-josefin h-15 w-[80%] rounded-md border border-stone-200 px-5 pl-15 text-xl text-stone-600"
         defaultValue={currTask}
