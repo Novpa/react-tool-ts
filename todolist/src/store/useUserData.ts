@@ -19,6 +19,6 @@ const useUserData = create<UserData & Actions>((set) => ({
     set((state) => ({ email: inputEmail, password: inputPassword })),
 }));
 
-export const getEmail = (state: UserData & Actions) => state.email;
+export const getEmail = (state: UserData & Actions) => state?.email ?? "";
 
 export default useUserData;

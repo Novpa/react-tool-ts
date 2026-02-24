@@ -4,6 +4,7 @@ import SearchTask from "./SearchTask";
 import sabit from "../assets/sabit.svg";
 import bintang from "../assets/bintang.svg";
 import Summary from "./Summary";
+import useUserData, { getEmail } from "../store/useUserData";
 
 export type initialStateType = {
   id: string;
@@ -35,6 +36,8 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
   const [allTasks, setAllTask] = useState<initialStateType[]>(initialState);
   const [searchTask, setSearchTask] = useState<string>("");
   const [isSortedBy, setIsSortedBy] = useState<string>("");
+
+  const user = useUserData(getEmail);
 
   console.log(isSortedBy);
 
@@ -95,10 +98,11 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
         className={`${isDarkTheme ? "fake-dark-mode" : ""} absolute top-5 flex w-full justify-center md:top-5 lg:top-10`}
       >
         <div className="w-[90%] md:w-[60%] lg:w-[40%]">
-          <div>
-            <h1 className="font-josefin text-4xl font-semibold tracking-widest text-stone-100">
+          <div className="text-stone-100">
+            <h1 className="font-josefin text-4xl font-semibold tracking-widest">
               TODO
             </h1>
+            <p>{user}</p>
           </div>
           <form
             onSubmit={handleAddTask}

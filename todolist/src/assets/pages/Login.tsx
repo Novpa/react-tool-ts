@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import useUserData from "../../store/useUserData";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -7,6 +8,7 @@ function Login() {
   const passwordInput = useRef<HTMLInputElement>(null);
 
   const getData = useUserData((state) => state.getUserData);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -14,37 +16,46 @@ function Login() {
     if (emailInput.current && passwordInput.current) {
       getData(emailInput.current?.value, passwordInput.current?.value);
     }
+    navigate("/todos");
   };
 
   return (
-    <main>
-      <form onSubmit={handleSubmit}>
-        <div className="py-4">
-          <input
-            className="h-10 w-50 rounded-md border border-indigo-500"
-            ref={emailInput}
-            type="email"
-            required
-            placeholder="Input email"
-          />
-        </div>
-        <div className="flex gap-5">
-          <input
-            className="h-10 w-50 rounded-md border border-indigo-500"
-            ref={passwordInput}
-            type={showPassword ? "text" : "password"}
-            required
-            placeholder="Input password"
-          />
+    <main className="flex h-dvh items-center justify-center">
+      <div>
+        <h1 className="text-2xl font-semibold">LOGIN</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="py-4">
+            <input
+              className="h-10 w-50 rounded-md border border-indigo-500 px-3"
+              ref={emailInput}
+              type="email"
+              required
+              placeholder="Input email"
+            />
+          </div>
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:gap-5">
+            <input
+              className="h-10 w-50 rounded-md border border-indigo-500 px-3"
+              ref={passwordInput}
+              type={showPassword ? "text" : "password"}
+              required
+              placeholder="Input password"
+            />
+            <button
+              className="mt-2 cursor-pointer hover:text-indigo-500"
+              onClick={() => setShowPassword((show) => !show)}
+            >
+              {showPassword ? "Hide password" : "Show passwords"}
+            </button>
+          </div>
           <button
-            className="cursor-pointer hover:text-indigo-500"
-            onClick={() => setShowPassword((show) => !show)}
+            className="mt-4 cursor-pointer rounded-md border bg-indigo-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-white hover:text-indigo-600"
+            type="submit"
           >
-            {showPassword ? "Hide password" : "Show passwords"}
+            Login
           </button>
-        </div>
-        <button type="submit">Login</button>
-      </form>
+        </form>
+      </div>
     </main>
   );
 }
