@@ -1,19 +1,30 @@
-import { useState } from "react";
-import Box from "./components/Box";
-import HeroBanner from "./components/HeroBanner";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AppLayout from "./pages/AppLayout";
+import Login from "./pages/Login";
+import Todos from "./pages/Todos";
+import PrivateRoute from "./pages/PrivateRoute";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: AppLayout,
+    children: [
+      { index: true, Component: Login },
+      { path: "login", Component: Login },
+      {
+        path: "todos",
+        element: (
+          <PrivateRoute>
+            <Todos />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+]);
 
 function App() {
-  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
-  return (
-    <>
-      <main
-        className={`main-bg ${isDarkTheme ? "bg-black" : "bg-white"} h-dvh`}
-      >
-        <HeroBanner isDarkTheme={isDarkTheme} />
-        <Box isDarkTheme={isDarkTheme} setIsDarkTheme={setIsDarkTheme} />
-      </main>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

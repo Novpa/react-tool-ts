@@ -4,7 +4,7 @@ import SearchTask from "./SearchTask";
 import sabit from "../assets/sabit.svg";
 import bintang from "../assets/bintang.svg";
 import Summary from "./Summary";
-import useUserData, { getEmail } from "../store/useUserData";
+import useUserData from "../store/useUserData";
 
 export type initialStateType = {
   id: string;
@@ -37,7 +37,7 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
   const [searchTask, setSearchTask] = useState<string>("");
   const [isSortedBy, setIsSortedBy] = useState<string>("");
 
-  const user = useUserData(getEmail);
+  const user = useUserData((state) => state.user?.inputEmail);
 
   console.log(isSortedBy);
 

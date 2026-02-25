@@ -1,22 +1,24 @@
-import { useState, useRef } from "react";
-import useUserData from "../../store/useUserData";
+import { useEffect, useState } from "react";
+import useUserData from "../store/useUserData";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const emailInput = useRef<HTMLInputElement>(null);
-  const passwordInput = useRef<HTMLInputElement>(null);
+  const [inputEmail, setInputEmail] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
 
-  const getData = useUserData((state) => state.getUserData);
+  const login = useUserData((state) => state.login);
+  const isAuthenticated = useUserData((state) => state.isAuthenticated);
+  const errorMessage = useUserData((state) => state.error);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/todos");
+  }, [isAuthenticated]);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (emailInput.current && passwordInput.current) {
-      getData(emailInput.current?.value, passwordInput.current?.value);
-    }
-    navigate("/todos");
+    login(inputEmail, inputPassword);
   };
 
   return (
@@ -25,9 +27,11 @@ function Login() {
         <h1 className="text-2xl font-semibold">LOGIN</h1>
         <form onSubmit={handleSubmit}>
           <div className="py-4">
+            {errorMessage && <p>{errorMessage}</p>}
             <input
               className="h-10 w-50 rounded-md border border-indigo-500 px-3"
-              ref={emailInput}
+              onChange={(e) => setInputEmail(e.target.value)}
+              value={inputEmail}
               type="email"
               required
               placeholder="Input email"
@@ -36,7 +40,8 @@ function Login() {
           <div className="flex flex-col items-start gap-2 sm:flex-row sm:gap-5">
             <input
               className="h-10 w-50 rounded-md border border-indigo-500 px-3"
-              ref={passwordInput}
+              onChange={(e) => setInputPassword(e.target.value)}
+              value={inputPassword}
               type={showPassword ? "text" : "password"}
               required
               placeholder="Input password"

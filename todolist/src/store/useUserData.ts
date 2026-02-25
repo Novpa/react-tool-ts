@@ -1,24 +1,56 @@
 import { create } from "zustand";
+// import { persist } from "zustand/middleware";
+
+interface User {
+  id: number;
+  name: string;
+  inputEmail: string;
+}
 
 type UserData = {
-  email: string;
-  password: string;
+  user: User | null;
+  token: string | null;
+  error: string | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  login: (inputEmail: string, inputPassword: string) => void;
 };
 
-type Actions = {
-  getUserData: (
-    inputEmail: UserData["email"],
-    inputPassword: UserData["password"],
-  ) => void;
-};
+const useUserData = create<UserData>((set) => ({
+  user: null,
+  token: null,
+  error: null,
+  isLoading: false,
+  isAuthenticated: false,
+  login: (inputEmail, inputPassword) => {
+    try {
+      set({ isLoading: true, error: null, isAuthenticated: false });
+      if (inputEmail !== "novpa@gmail.com" || inputPassword !== "novpar") {
+        throw new Error("Invalid credential");
+      }
 
-const useUserData = create<UserData & Actions>((set) => ({
-  email: "",
-  password: "",
-  getUserData: (inputEmail, inputPassword) =>
-    set((state) => ({ email: inputEmail, password: inputPassword })),
+      const fakeUser: User = {
+        id: 1,
+        name: "novpa",
+        inputEmail,
+      };
+
+      const fakeToken = "fake-jwt-token";
+
+      // console.log(fakeUser);
+
+      set({
+        user: fakeUser,
+        token: fakeToken,
+        isLoading: false,
+        isAuthenticated: true,
+      });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "unknown error";
+
+      set({ error: message });
+    }
+  },
 }));
-
-export const getEmail = (state: UserData & Actions) => state?.email ?? "";
 
 export default useUserData;
