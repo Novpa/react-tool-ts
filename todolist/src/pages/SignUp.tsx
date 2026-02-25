@@ -1,12 +1,30 @@
 import { useState } from "react";
+import Backendless from "../lib/backendless";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [reInputPassword, setReInputPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const userData = {
+      email: inputEmail,
+      password: inputPassword,
+    };
+
+    const result = await Backendless.Data.of("todos").save(userData);
+    setInputEmail("");
+    setInputPassword("");
+    setReInputPassword("");
+    if (result) {
+      alert("Account successfully created");
+      navigate("/login");
+    }
+  };
 
   return (
     <main className="flex h-dvh items-center justify-center">
@@ -59,7 +77,7 @@ function SignUp() {
             className="mt-4 cursor-pointer rounded-md border bg-indigo-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-white hover:text-indigo-600 disabled:bg-stone-500"
             type="submit"
           >
-            Login
+            Sign up
           </button>
         </form>
       </div>

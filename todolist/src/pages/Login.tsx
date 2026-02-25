@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useUserData from "../store/useUserData";
 import { useNavigate } from "react-router-dom";
+import Backendless from "../lib/backendless";
 
 function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -19,6 +20,11 @@ function Login() {
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(inputEmail, inputPassword);
+  };
+
+  const loadData = async () => {
+    const response = await Backendless.Data.of("todos").find();
+    console.log(response);
   };
 
   return (
@@ -60,6 +66,12 @@ function Login() {
             Login
           </button>
         </form>
+        <button
+          className="mt-4 cursor-pointer rounded-md border bg-indigo-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-white hover:text-indigo-600"
+          onClick={loadData}
+        >
+          Load Data
+        </button>
       </div>
     </main>
   );
