@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import useUserData from "../store/useUserData";
 import { useNavigate } from "react-router-dom";
-import Backendless from "../lib/backendless";
 
 function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -15,17 +14,15 @@ function Login() {
 
   useEffect(() => {
     if (isAuthenticated) navigate("/todos");
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(inputEmail, inputPassword);
+    if (isAuthenticated) {
+      navigate("todos");
+    }
   };
-
-  // const loadData = async () => {
-  //   const response = await Backendless.Data.of("todos").find();
-  //   console.log(response);
-  // };
 
   return (
     <main className="flex h-dvh items-center justify-center">
@@ -53,6 +50,7 @@ function Login() {
               placeholder="Input password"
             />
             <button
+              type="button"
               className="mt-2 cursor-pointer hover:text-indigo-500"
               onClick={() => setShowPassword((show) => !show)}
             >
