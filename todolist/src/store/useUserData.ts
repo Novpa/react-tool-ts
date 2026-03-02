@@ -10,13 +10,17 @@ interface User {
 }
 
 type UserData = {
+  //State
   user: User | null;
   token: string | null;
   error: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+
+  //Action
   login: (inputEmail: string, inputPassword: string) => Promise<void>;
   registerUser: (inputEmail: string, inputPassword: string) => Promise<void>;
+  logout: () => void;
 };
 
 const useUserData = create<UserData>()(
@@ -64,6 +68,13 @@ const useUserData = create<UserData>()(
           console.log(error);
         }
       },
+
+      logout: () =>
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        }),
     }),
     { name: "auth" },
   ),

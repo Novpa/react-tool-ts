@@ -5,6 +5,7 @@ import sabit from "../assets/sabit.svg";
 import bintang from "../assets/bintang.svg";
 import Summary from "./Summary";
 import useUserData from "../store/useUserData";
+import { useNavigate } from "react-router-dom";
 
 export type initialStateType = {
   id: string;
@@ -23,6 +24,9 @@ const generateRandomId = (): string => {
 };
 
 function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
+  const logout = useUserData((state) => state.logout);
+  const navigate = useNavigate();
+
   const initialState: initialStateType[] = [
     {
       id: generateRandomId(),
@@ -31,6 +35,11 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
       createdOn: new Date(),
     },
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const [inputTask, setInputTask] = useState("");
   const [allTasks, setAllTask] = useState<initialStateType[]>(initialState);
@@ -102,11 +111,19 @@ function Box({ isDarkTheme, setIsDarkTheme }: BoxProps) {
             <h1 className="font-josefin text-4xl font-semibold tracking-widest">
               TODO
             </h1>
-            <p>{user}</p>
+            <div className="flex items-center justify-between gap-8 md:block">
+              <p>{user}</p>
+              <button
+                onClick={handleLogout}
+                className="my-2 cursor-pointer rounded-md border border-white bg-transparent px-4 py-1"
+              >
+                logout
+              </button>
+            </div>
           </div>
           <form
             onSubmit={handleAddTask}
-            className="relative mt-2 mb-3 rounded-md bg-white md:mt-10"
+            className="relative mt-2 mb-3 rounded-md bg-white md:mt-5"
           >
             <input
               value={inputTask}
