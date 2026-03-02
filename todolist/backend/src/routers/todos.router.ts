@@ -8,5 +8,6 @@ router.get("/", todosController?.getAll);
 router.post("/", todosController?.create);
 router.patch("/:id", todosController.update);
 router.delete("/:id/delete", todosController.delete);
+router.get("/:id/todo", todosController.getById);
 
 export default router;

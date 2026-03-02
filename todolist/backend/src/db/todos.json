@@ -1,1 +1,12 @@
-{"todos":[{"id":1772466500949,"task":"Balajar Node js","completed":false,"deleted":"1772466822002","updated":null,"createdOn":"1772466500949"}]}
+{
+  "todos": [
+    {
+      "id": 1772466500949,
+      "task": "Balajar Node js",
+      "completed": false,
+      "deleted": "1772466822002",
+      "updated": null,
+      "createdOn": "1772466500949"
+    }
+  ]
+}

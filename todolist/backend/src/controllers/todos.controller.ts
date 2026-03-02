@@ -94,4 +94,17 @@ export const todosController = {
       message: "Deleted successfully",
     });
   },
+
+  getById(req: Request, res: Response) {
+    const id = Number(req.params?.id);
+    const todos = JSON.parse(todosData()).todos;
+
+    const findTodo = todos?.find((todo: Todo) => todo.id === id);
+    console.log(findTodo);
+
+    res.status(200).json({
+      status: "Successfull",
+      data: !findTodo ? "Data not found" : findTodo,
+    });
+  },
 };
