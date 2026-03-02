@@ -22,10 +22,10 @@ function Login() {
     login(inputEmail, inputPassword);
   };
 
-  const loadData = async () => {
-    const response = await Backendless.Data.of("todos").find();
-    console.log(response);
-  };
+  // const loadData = async () => {
+  //   const response = await Backendless.Data.of("todos").find();
+  //   console.log(response);
+  // };
 
   return (
     <main className="flex h-dvh items-center justify-center">
@@ -66,12 +66,12 @@ function Login() {
             Login
           </button>
         </form>
-        <button
+        {/* <button
           className="mt-4 cursor-pointer rounded-md border bg-indigo-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-white hover:text-indigo-600"
           onClick={loadData}
         >
           Load Data
-        </button>
+        </button> */}
       </div>
     </main>
   );

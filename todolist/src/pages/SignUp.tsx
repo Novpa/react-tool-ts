@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Backendless from "../lib/backendless";
 import { useNavigate } from "react-router-dom";
+import useUserData from "../store/useUserData";
 
 function SignUp() {
+  const register = useUserData((state) => state.registerUser);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
@@ -11,19 +13,11 @@ function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userData = {
-      email: inputEmail,
-      password: inputPassword,
-    };
-
-    const result = await Backendless.Data.of("todos").save(userData);
+    register(inputEmail, inputPassword);
     setInputEmail("");
     setInputPassword("");
     setReInputPassword("");
-    if (result) {
-      alert("Account successfully created");
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   return (
@@ -60,6 +54,7 @@ function SignUp() {
                 placeholder="Input password again"
               />
               <button
+                type="button"
                 className="mt-2 cursor-pointer hover:text-indigo-500"
                 onClick={() => setShowPassword((show) => !show)}
               >
