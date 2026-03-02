@@ -5,7 +5,8 @@ import path from "path";
 interface Todo {
   id: number;
   task: string;
-  completed: string | null;
+  completed: boolean;
+  deleted: string | null;
   updated: string | null;
   createdOn: string;
 }
@@ -34,7 +35,8 @@ export const todosController = {
     const newTask = {
       id: Date.now(),
       task,
-      completed: null,
+      completed: false,
+      deleted: null,
       updated: null,
       createdOn: Date.now().toString(),
     };
@@ -70,8 +72,26 @@ export const todosController = {
 
     res.status(200).json({
       status: "successfull",
-      message: "Update successfull",
+      message: "Update successfully",
       data: newlyTask,
+    });
+  },
+
+  //? SOFT DELETE
+  delete(req: Request, res: Response) {
+    const id = Number(req.params?.id);
+
+    const todos = JSON.parse(todosData()).todos;
+
+    const updatedTodos = todos?.map((todo: Todo) =>
+      todo.id === id ? { ...todo, deleted: Date.now().toString() } : todo,
+    );
+
+    fs.writeFileSync(todosJsonPath, JSON.stringify({ todos: updatedTodos }));
+
+    res.status(204).json({
+      status: "successfull",
+      message: "Deleted successfully",
     });
   },
 };
